@@ -37,6 +37,32 @@ ${root }
 </body>
 </html>
 ```
+然后在项目的web.xml文件添加核心servlet
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	
+	<servlet>
+		<servlet-name>main</servlet-name>
+		<servlet-class>cn.xiuyu.servlet.MainServlet</servlet-class>
+		<!-- 设置最先启动保证初始化 -->
+		<load-on-startup>1</load-on-startup>
+		<init-param>
+			<!-- 自定扫描的包 -->
+			<param-name>package</param-name>
+			<param-value>cn.xiuyu</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>main</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+</web-app>
+
+```
 然后访问地址：http:localhost:8080/${项目名}/index/hello
 
 
