@@ -70,3 +70,73 @@ ${root }
 ```
 然后访问地址：http:localhost:8080/${项目名}/index/hello  
 #### 其实使用上springmvc差不多，就这样。 有什么bug可以告诉我阿！ 告诉我阿 ！ 我阿！ 阿！！！
+
+### 重定向和转发
+```java
+	//post请求
+	@Mapping(value="/post",RequestType=Type.post)
+	public String post(){
+		System.out.println("---进入到了post请求 --");
+		return "redirect:/index/get";
+	}
+	//get请求value  不备注默认为get
+	@Mapping(value="/get",RequestType=Type.get)
+	public String get(Model model){
+		//model 只支持传值 取值
+		model.setParameter("key", "value");
+		System.out.println("---进入到了get请求 --");
+		return "welcome";
+	}
+```
+### 接受单字段 可以传入model对象（仅能传输对象）
+```java
+	//接受单字段
+	@Mapping(value="/one",RequestType=Type.post)
+	public String one(String name,Model model){
+		//model 只支持传值 取值
+		model.setParameter("key", name);
+		return "welcome";
+	}
+```
+### 封装实体
+```java
+	//封装实体
+	@Mapping(value="/object",RequestType=Type.post)
+	public String object(User u,Model model){
+		//model 只支持传值 取值
+		model.setParameter("key", u.getName() + "--" + u.getPassword());
+		return "welcome";
+	}
+```
+### 返回json  需要返回json对象并且在方法上添加@Json注解
+```java
+//返回json
+	@Mapping(value="/json",RequestType=Type.get)
+	@Json
+	public User json(String name,String password,Model model){
+		//model 只支持传值 取值
+		User u = new User();
+		u.setName(name);
+		u.setPassword(password);
+		System.out.println(u);
+		return u;
+	}
+```
+### 上传文件（目前仅能单文件上传），需要把表单设置为enctype="multipart/form-data"，然后在action方法添加FileEntity实体接受文件，上传到/WEB-INF/upload/*/*文件夹下(*为算法生成)
+```html
+<form action="${pageContext.request.contextPath }/index/uoload" method="post" enctype="multipart/form-data">
+	<input type="file" name="testFile">
+	<input type="submit" value="file">
+</form>
+```
+action方法
+```java
+//上传文件
+	@Mapping(value="/uoload",RequestType=Type.post)
+	public String uoload(FileEntity entity,Model model){
+		//model 只支持传值 取值
+		model.setParameter("key", entity.getPath() + " " +entity.getNewName());
+		return "welcome";
+	}
+```
+可以在文件上传过程接收文件上传状态，返回一个json对象(封装文件大小`pContentLength`和已上传文件`pBytesRead`)
