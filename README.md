@@ -10,9 +10,9 @@
 具体的思路就是这样  
 如果有志之士可以fork一份 添加功能,修复bug.  
 留个邮箱,用于交流 [gexyuzz@gmail.com](gexyuzz@gmail.com) !不是广告！！！  
-#### 打包好了 [download](http://images.zzcode.cn/mvc2.jar)可以直接使用啦～
-#### 用到的jar包:[bcel-6.0.jar](http://mvnrepository.com/artifact/org.apache.bcel/bcel) [commons-beanutils.jar](http://mvnrepository.com/artifact/commons-beanutils/commons-beanutils/1.9.3)  [json-20170516.jar](http://mvnrepository.com/artifact/org.json/json/20160810)
-#### 日志组件: [logback](http://mvnrepository.com/artifact/ch.qos.logback/logback-core/1.1.7) 
+#### 打包好了   [Download](http://images.zzcode.cn/mvc2.jar)可以直接使用啦～
+用到的jar包:[bcel-6.0.jar](http://mvnrepository.com/artifact/org.apache.bcel/bcel) [commons-beanutils.jar](http://mvnrepository.com/artifact/commons-beanutils/commons-beanutils/1.9.3)  [json-20170516.jar](http://mvnrepository.com/artifact/org.json/json/20160810)
+日志组件: [logback](http://mvnrepository.com/artifact/ch.qos.logback/logback-core/1.1.7) 
 ### 那么怎么使用呢？
 
 首先在action类添加@Action注解,在方法添加@Mapping注解.
