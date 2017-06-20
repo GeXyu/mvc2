@@ -15,6 +15,8 @@ import org.apache.bcel.classfile.LocalVariable;
 import org.apache.bcel.classfile.LocalVariableTable;
 import org.apache.bcel.generic.Type;
 
+import ch.qos.logback.core.rolling.helper.RenameUtil;
+import cn.xiuyu.entity.FileEntity;
 import cn.xiuyu.entity.MappingEntity;
 import cn.xiuyu.entity.Model;
 import cn.xiuyu.entity.ParameterEntity;
@@ -106,6 +108,10 @@ public class RequestUtils {
 				Model model = Model.getInstance();
 				request.setAttribute("root", model);
 				en.setValue(model);
+			}else if(returnType.toString().equals(FileEntity.class.getName())){
+				//如果是文件上传
+				FileEntity attribute = (FileEntity) request.getAttribute("fileUpload");
+				en.setValue(attribute);
 			}
 			else{
 				en.setValue(seParameterValues(en, request));

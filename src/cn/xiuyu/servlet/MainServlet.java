@@ -1,6 +1,7 @@
 package cn.xiuyu.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -14,12 +15,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileUploadException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import cn.xiuyu.entity.FileEntity;
 import cn.xiuyu.entity.MappingEntity;
 import cn.xiuyu.entity.ParameterEntity;
+import cn.xiuyu.utils.FileUtils;
 import cn.xiuyu.utils.InitUtils;
 import cn.xiuyu.utils.JsonUtils;
 import cn.xiuyu.utils.RequestUtils;
@@ -34,6 +37,7 @@ public class MainServlet extends HttpServlet {
 	private static final InitUtils initutils = InitUtils.getInstance();
 	private static final RequestUtils requestUtils = RequestUtils.getInstance();
 	private static final ReturnView returnView = ReturnView.getInsatnce();
+	private static final FileUtils fileUtils = FileUtils.getInstance();
 	private static final Logger  log  =  LoggerFactory.getLogger(MainServlet.class);
 	
 	
@@ -61,6 +65,7 @@ public class MainServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8"); 
 		MappingEntity mappringEntity = null;
 		//根据请求url去相应的map找运行的方法
 		String requesttype = request.getMethod().toLowerCase();
@@ -75,6 +80,11 @@ public class MainServlet extends HttpServlet {
 			return;
 		}
 		//处理文件上传
+		try {
+			 fileUtils.FileUpload(request,response);
+		} catch (FileUploadException e) {
+			e.printStackTrace();
+		}
 		
 		//执行返回
 		doreturn(mappringEntity,request,response);
@@ -88,6 +98,8 @@ public class MainServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
+	
+	
 	private void doreturn(MappingEntity mappringEntity,HttpServletRequest request,HttpServletResponse response ) throws IOException, ServletException{
 		Object jumpUrl = null;
 		try {
@@ -97,17 +109,21 @@ public class MainServlet extends HttpServlet {
 			Object obj = clazz.newInstance();
 			Method method = mappringEntity.getMethod();
 			int size = methodParameter.size();
-			//如果是返回json
+			
 
 			//如果没有参数就直接运行
 			if(size<=0){
 				//直接运行
+				//如果是返回json
 				if(mappringEntity.isJson()){
 					String json = JsonUtils.getInstance().obj2json(method.invoke(obj, null));
 					if(json.length() != 0){
 						response.setCharacterEncoding("UTF-8");
 						response.setContentType("application/json;charset=utf-8");
-						response.getWriter().write(json);
+						PrintWriter writer = response.getWriter();
+						writer.write(json);
+						writer.flush();
+						writer.close();
 					}
 					return;
 				}else{
@@ -120,14 +136,17 @@ public class MainServlet extends HttpServlet {
 				for(int i=0;i<size; i++){
 					Parameter[i] = methodParameter.get(i).getValue();	
 				}
-				
+				//如果是json
 				if(mappringEntity.isJson()){
 	
 					String json = JsonUtils.getInstance().obj2json(method.invoke(obj, Parameter));
 					if(json.length() != 0){
 						response.setCharacterEncoding("UTF-8");
 						response.setContentType("application/json;charset=utf-8");
-						response.getWriter().write(json);
+						PrintWriter writer = response.getWriter();
+						writer.write(json);
+						writer.flush();
+						writer.close();
 						
 					}
 					//json为空

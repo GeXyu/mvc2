@@ -95,7 +95,7 @@ public class InitUtils {
 								en.setMethod(m);
 								en.setJson(true);
 								getmappings.put(en.getMapper(), en);
-								log.info(en.getMapper() + "Add mapping success .....");
+								log.info(en.getMapper() + "--json get--Add mapping success .....");
 							}else if(type.equals("post")){		
 								MappingEntity en = new MappingEntity();
 								en.setClazz(maps.getValue().getClass());
@@ -104,7 +104,7 @@ public class InitUtils {
 								en.setMethod(m);
 								en.setJson(true);
 								postmappings.put(en.getMapper(), en);
-								log.info(en.getMapper() + "Add mapping success .....");
+								log.info(en.getMapper() + "--json post --Add mapping success .....");
 							}
 						}else{
 							if(type.equals("get")){
@@ -115,7 +115,7 @@ public class InitUtils {
 								en.setMethod(m);
 								en.setJson(false);
 								getmappings.put(en.getMapper(), en);
-								log.info(en.getMapper() + "Add mapping success .....");
+								log.info(en.getMapper() + "---get--Add mapping success .....");
 							}else if(type.equals("post")){		
 								MappingEntity en = new MappingEntity();
 								en.setClazz(maps.getValue().getClass());
@@ -124,7 +124,7 @@ public class InitUtils {
 								en.setMethod(m);
 								en.setJson(false);
 								postmappings.put(en.getMapper(), en);
-								log.info(en.getMapper() + "Add mapping success .....");
+								log.info(en.getMapper() + "--post--Add mapping success .....");
 							}
 						}
 						
